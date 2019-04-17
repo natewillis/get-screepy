@@ -26,7 +26,7 @@ Creep.prototype.runRole =
         if (useContainer) {
 
             // Find Container For Refilling
-            var room = Game.spawns[this.memory.spawn].room;
+            var room = Game.rooms[this.memory.room];
             var sources = room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return structure.structureType == STRUCTURE_STORAGE;

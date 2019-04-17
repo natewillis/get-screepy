@@ -17,11 +17,11 @@ RoomPosition.prototype.surround_grid =
         let minY = Math.max(this.y-1,0);
         let maxY = Math.min(this.y+1,49);
 
-        // Create Grid
+        // Create Grid 
         for (let i = minX; i <= maxX; i++) {
             for (let j = minY; j <= maxY; j++) {
-                if (i !== this.x && j !== this.y) {
-                    retArr.push(new RoomPosition(i,j,this.RoomPosition));
+                if (i !== this.x || j !== this.y) {
+                    retArr.push(new RoomPosition(i,j,this.roomName));
                 }
             }
         }
