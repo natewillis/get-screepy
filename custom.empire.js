@@ -35,6 +35,7 @@ var empire = {
             for (let thing_type in thing_types) {
                 Memory.empire.rooms[room_name][thing_type] = [];
                 thing_by_id[thing_type] = {};
+                console.log('array for '+thing_type+' is '+Memory.empire.rooms[room_name][thing_type]);
             }
 
             // Sort Out Structures
