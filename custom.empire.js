@@ -32,7 +32,7 @@ var empire = {
             // Setup Empty Dictionaries
             let thing_types = ['roads', 'walls'];
             Memory.empire.rooms[room_name].objects_at_position = {};
-            for (let thing_type in thing_types) {
+            for (let thing_type of thing_types) {
                 Memory.empire.rooms[room_name][thing_type] = [];
                 thing_by_id[thing_type] = {};
                 console.log('array for '+thing_type+' is '+Memory.empire.rooms[room_name][thing_type]+' with length '+Memory.empire.rooms[room_name][thing_type].length);
