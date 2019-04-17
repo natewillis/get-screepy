@@ -58,6 +58,7 @@ var empire = {
                 } else if (struct.structureType == STRUCTURE_RAMPART || struct.structureType == STRUCTURE_WALL) {
 
                     // Memory Storage
+                    console.log(Memory.empire.rooms[room_name]);
                     Memory.empire.rooms[room_name].walls.push(struct.id);
                     if (!(struct.pos.shorthand in Memory.empire.rooms[room_name].objects_at_position)) {
                         for (let thing_type in thing_types) {
