@@ -62,6 +62,7 @@ var empire = {
                     Memory.empire.rooms[room_name].walls.push(struct.id);
                     if (!(struct.pos.shorthand in Memory.empire.rooms[room_name].objects_at_position)) {
                         for (let thing_type of thing_types) {
+                            console.log('the shorthand is ' + struct.pos.shorthand);
                             Memory.empire.rooms[room_name].objects_at_position[struct.pos.shorthand][thing_type] = '';
                         }
                         Memory.empire.rooms[room_name].objects_at_position[struct.pos.shorthand]['road'] = struct.id;
