@@ -76,27 +76,60 @@ var empire = {
             for (let thing_type in thing_types) {
 
                 // Init Variables
-                var remaining_things = Game.memory.empire.rooms[room_name][thing_type].slice();
-                var good_path = [];
+                var remaining_thing_ids = Game.memory.empire.rooms[room_name][thing_type].slice();
+                var good_path_ids = [];
 
                 // Figure out closest to top left for starting point
                 let min_distance = 1000000;
-                let start_thing = null;
+                let start_thing_id = '';
                 for (let thing_id in Game.memory.empire.rooms[room_name][thing_type]) {
                     let current_range = thing_by_id[thing_type][thing_id].pos.getRangeTo(top_left_point);
                     if (current_range < min_distance) {
                         min_distance = current_range;
-                        start_thing = thing_id;
+                        start_thing_id = thing_id;
                     }
                 }
 
                 // Populate Initial Algorithms with current point
-                good_path.push(start_thing);
-                remaining_things = remaining_things.filter(e => e !== start_thing);
+                good_path_ids.push(start_thing_id);
+                remaining_thing_ids = remaining_thing_ids.filter(e => e !== start_thing_id);
 
                 // Do algorithm
-                while (remaining_things.length > 0) {
+                while (remaining_thing_ids.length > 0) {
 
+                    // Jump Off From Last Point
+                    let last_thing_id = good_path_ids[good_path_ids.length-1];
+                    let last_thing = thing_by_id[thing_type][last_thing_id];
+
+                    // Create search grid
+                    let search_grid = last_thing.pos.surround_grid();
+
+                    // Search for anything in the grid
+                    for (current_search_position in search_grid) {
+                        if (current_search_position.shorthand() in Game.memory.empire.rooms[room_name].objects_at_position) {
+                            let current_id = Game.memory.empire.rooms[room_name].objects_at_position[current_search_position.shorthand()][thing_type];
+                            if (current_id !== '') {
+                                if (current_id in remaining_thing_ids) {
+                                    good_path_ids.push(current_id);
+                                    remaining_thing_ids = remaining_thing_ids.filter(e => e !== current_id);
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+
+                    // Be done if we're finished
+                    if (remaining_thing_ids.length == 0) {
+                        break;
+                    }
+
+                    // Check if we added something 
+                    if (last_thing_id == good_path_ids[good_path_ids.length-1]) {
+                        // Add the closest one since we couldn't find a new one
+                        for (let current_thing_id in remaining_thing_ids) {
+                            let current_thing = thing_by_id[thing_type]
+                        }
+                    }
                 }
                     
             }
