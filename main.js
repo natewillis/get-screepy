@@ -97,8 +97,8 @@ module.exports.loop = function () {
     }
 
     // Run empire variable creation code if necessary
-    Game.memory.empire_world_memory_counter += 1;
-    if (Game.memory.empire_world_memory_counter > 60) {
+    Memory.empire_world_memory_counter += 1;
+    if (Memory.empire_world_memory_counter > 60) {
         empire.update_world_memory();
     }
 
