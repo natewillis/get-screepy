@@ -3,23 +3,23 @@ var empire = {
     update_world_memory: function () {
 
         // We're running this function so reinitialize the counter at 0
-        Game.memory.empire_world_memory_counter = 0;
+        Memory.empire_world_memory_counter = 0;
 
         // Delete The Existing Memory Locations
-        if (typeof Game.memory.empire !== "undefined") {
-                delete Game.memory.empire;
+        if (typeof Memory.empire !== "undefined") {
+                delete Memory.empire;
         }
 
         // Organize By Rooms We Own and have spawns in
-        Game.memory.empire.rooms = {};
+        Memory.empire.rooms = {};
         for (let spawn of Game.spawns) {
-                Game.memory.empire.rooms[spawn.room.name] = {}
+                Memory.empire.rooms[spawn.room.name] = {}
         }
 
         // Add Remote Harvest Rooms Here
 
         // Populate Rooms
-        for (let room_name in Game.memory.empire.rooms) {
+        for (let room_name in Memory.empire.rooms) {
 
             // Setup Room Object
             let room = Game.rooms[room_name];
@@ -29,9 +29,9 @@ var empire = {
 
             // Setup Empty Dictionaries
             let thing_types = ['roads', 'walls'];
-            Game.memory.empire.rooms[room_name].objects_at_position = {};
+            Memory.empire.rooms[room_name].objects_at_position = {};
             for (let thing_type in thing_types) {
-                Game.memory.empire.rooms[room_name][thing_type] = [];
+                Memory.empire.rooms[room_name][thing_type] = [];
                 thing_by_id[thing_type] = {};
             }
 
@@ -42,12 +42,12 @@ var empire = {
                 if (struct.structureType == STRUCTURE_ROAD) {
 
                     // Memory Storage
-                    Game.memory.empire.rooms[room_name].roads.push(struct.id);
-                    if (!(struct.pos.shorthand in Game.memory.empire.rooms[room_name].objects_at_position)) {
+                    Memory.empire.rooms[room_name].roads.push(struct.id);
+                    if (!(struct.pos.shorthand in Memory.empire.rooms[room_name].objects_at_position)) {
                         for (let thing_type in thing_types) {
-                            Game.memory.empire.rooms[room_name].objects_at_position[struct.pos.shorthand][thing_type] = '';
+                            Memory.empire.rooms[room_name].objects_at_position[struct.pos.shorthand][thing_type] = '';
                         }
-                        Game.memory.empire.rooms[room_name].objects_at_position[struct.pos.shorthand]['road'] = struct.id;
+                        Memory.empire.rooms[room_name].objects_at_position[struct.pos.shorthand]['road'] = struct.id;
                     }
 
                     // Temp Path Algorithm Search
@@ -56,12 +56,12 @@ var empire = {
                 } else if (struct.structureType == STRUCTURE_RAMPART || struct.structureType == STRUCTURE_WALL) {
 
                     // Memory Storage
-                    Game.memory.empire.rooms[room_name].walls.push(struct.id);
-                    if (!(struct.pos.shorthand in Game.memory.empire.rooms[room_name].objects_at_position)) {
+                    Memory.empire.rooms[room_name].walls.push(struct.id);
+                    if (!(struct.pos.shorthand in Memory.empire.rooms[room_name].objects_at_position)) {
                         for (let thing_type in thing_types) {
-                            Game.memory.empire.rooms[room_name].objects_at_position[struct.pos.shorthand][thing_type] = '';
+                            Memory.empire.rooms[room_name].objects_at_position[struct.pos.shorthand][thing_type] = '';
                         }
-                        Game.memory.empire.rooms[room_name].objects_at_position[struct.pos.shorthand]['road'] = struct.id;
+                        Memory.empire.rooms[room_name].objects_at_position[struct.pos.shorthand]['road'] = struct.id;
                     }
 
                     // Temp Path Algorithm Search
@@ -79,13 +79,13 @@ var empire = {
             for (let thing_type in thing_types) {
 
                 // Init Variables
-                var remaining_thing_ids = Game.memory.empire.rooms[room_name][thing_type].slice();
+                var remaining_thing_ids = Memory.empire.rooms[room_name][thing_type].slice();
                 var good_path_ids = [];
 
                 // Figure out closest to top left for starting point
                 let min_distance = 1000000;
                 let start_thing_id = '';
-                for (let thing_id in Game.memory.empire.rooms[room_name][thing_type]) {
+                for (let thing_id in Memory.empire.rooms[room_name][thing_type]) {
                     let current_range = thing_by_id[thing_type][thing_id].pos.getRangeTo(top_left_point);
                     if (current_range < min_distance) {
                         min_distance = current_range;
@@ -109,8 +109,8 @@ var empire = {
 
                     // Search for anything in the grid
                     for (current_search_position in search_grid) {
-                        if (current_search_position.shorthand() in Game.memory.empire.rooms[room_name].objects_at_position) {
-                            let current_id = Game.memory.empire.rooms[room_name].objects_at_position[current_search_position.shorthand()][thing_type];
+                        if (current_search_position.shorthand() in Memory.empire.rooms[room_name].objects_at_position) {
+                            let current_id = Memory.empire.rooms[room_name].objects_at_position[current_search_position.shorthand()][thing_type];
                             if (current_id !== '') {
                                 if (current_id in remaining_thing_ids) {
                                     good_path_ids.push(current_id);
@@ -150,7 +150,7 @@ var empire = {
                 }
 
                 // Store the new best path to memory
-                Game.memory.empire.rooms[room_name].optimized_role_paths[thing_type] = good_path_ids;
+                Memory.empire.rooms[room_name].optimized_role_paths[thing_type] = good_path_ids;
                     
             }
         }
