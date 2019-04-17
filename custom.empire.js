@@ -11,6 +11,7 @@ var empire = {
         }
 
         // Organize By Rooms We Own and have spawns in
+        Memory.empire = {}
         Memory.empire.rooms = {};
         for (let spawn of Game.spawns) {
                 Memory.empire.rooms[spawn.room.name] = {}
