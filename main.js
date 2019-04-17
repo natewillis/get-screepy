@@ -1,7 +1,9 @@
 /// <reference path="ScreepsAutocomplete-master\_references.js" />
 require('prototype.spawn');
 require('prototype.tower');
-require('prototype.creep')
+require('prototype.creep');
+require('prototype.roomposition');
+var empire = require('custom.empire');
 
 // Persistant Spawn Variables
 for (let spawn_name in Game.spawns) {
@@ -78,6 +80,9 @@ if (false) {
     });
 }
 
+// Run The Empire Memory Script To Initialize
+empire.update_world_memory();
+
 module.exports.loop = function () {
     
     //Profiling Variables
@@ -89,6 +94,12 @@ module.exports.loop = function () {
             delete Memory.creeps[name];
             console.log('Clearing non-existing creep memory:', name);
         }
+    }
+
+    // Run empire variable creation code if necessary
+    Game.memory.empire_world_memory_counter += 1;
+    if (Game.memory.empire_world_memory_counter > 60) {
+        empire.update_world_memory();
     }
 
     // find all towers
