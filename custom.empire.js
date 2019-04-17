@@ -91,7 +91,7 @@ var empire = {
                 // Figure out closest to top left for starting point
                 let min_distance = 1000000;
                 let start_thing_id = '';
-                for (let thing_id in Memory.empire.rooms[room_name][thing_type]) {
+                for (let thing_id of Memory.empire.rooms[room_name][thing_type]) {
                     let current_range = thing_by_id[thing_type][thing_id].pos.getRangeTo(top_left_point);
                     if (current_range < min_distance) {
                         min_distance = current_range;
@@ -114,7 +114,7 @@ var empire = {
                     let search_grid = last_thing.pos.surround_grid();
 
                     // Search for anything in the grid
-                    for (current_search_position in search_grid) {
+                    for (current_search_position of search_grid) {
                         if (current_search_position.shorthand() in Memory.empire.rooms[room_name].objects_at_position) {
                             let current_id = Memory.empire.rooms[room_name].objects_at_position[current_search_position.shorthand()][thing_type];
                             if (current_id !== '') {
@@ -140,7 +140,7 @@ var empire = {
                         let closest_thing_id = '';
 
                         // Add the closest one since we couldn't find a new one
-                        for (let current_thing_id in remaining_thing_ids) {
+                        for (let current_thing_id of remaining_thing_ids) {
                             let current_range = thing_by_id[thing_type][current_thing_id].pos.getRangeTo(thing_by_id[thing_type][last_thing_id]);
                             if (current_range < min_distance) {
                                 min_distance = current_range;
