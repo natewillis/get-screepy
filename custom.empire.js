@@ -2,6 +2,9 @@ var empire = {
 
     update_world_memory: function () {
 
+        // We're running this function so reinitialize the counter at 0
+        Game.memory.empire_world_memory_counter = 0;
+
         // Delete The Existing Memory Locations
         if (typeof Game.memory.empire !== "undefined") {
                 delete Game.memory.empire;
@@ -123,14 +126,31 @@ var empire = {
                         break;
                     }
 
-                    // Check if we added something 
+                    // Check if we added something and if not choose the next closest
                     if (last_thing_id == good_path_ids[good_path_ids.length-1]) {
+
+                        // Setup Min Calc Stuff
+                        let min_distance = 1000000;
+                        let closest_thing_id = '';
+
                         // Add the closest one since we couldn't find a new one
                         for (let current_thing_id in remaining_thing_ids) {
-                            let current_thing = thing_by_id[thing_type]
+                            let current_range = thing_by_id[thing_type][current_thing_id].pos.getRangeTo(thing_by_id[thing_type][last_thing_id]);
+                            if (current_range < min_distance) {
+                                min_distance = current_range;
+                                closest_thing_id = thing_id;
+                            }
                         }
+
+                        // Add the closest to the list and we go around the horn again
+                        good_path_ids.push(closest_thing_id);
+                        remaining_thing_ids = remaining_thing_ids.filter(e => e !== closest_thing_id);
+
                     }
                 }
+
+                // Store the new best path to memory
+                Game.memory.empire.rooms[room_name].optimized_role_paths[thing_type] = good_path_ids;
                     
             }
         }
