@@ -35,7 +35,6 @@ var empire = {
             for (let thing_type of thing_types) {
                 Memory.empire.rooms[room_name][thing_type] = [];
                 thing_by_id[thing_type] = {};
-                console.log('array for '+thing_type+' is '+Memory.empire.rooms[room_name][thing_type]+' with length '+Memory.empire.rooms[room_name][thing_type].length);
             }
 
             // Sort Out Structures
@@ -80,7 +79,7 @@ var empire = {
             // Choose starting point (closest to 0,0)
             let top_left_point = new RoomPosition(0,0,room_name);
             
-            for (let thing_type in thing_types) {
+            for (let thing_type of thing_types) {
 
                 // Init Variables
                 var remaining_thing_ids = Memory.empire.rooms[room_name][thing_type].slice();
