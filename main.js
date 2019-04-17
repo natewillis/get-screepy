@@ -81,7 +81,7 @@ if (false) {
 }
 
 // Run The Empire Memory Script To Initialize
-empire.update_world_memory();
+//empire.update_world_memory();
 
 module.exports.loop = function () {
     
@@ -98,9 +98,9 @@ module.exports.loop = function () {
 
     // Run empire variable creation code if necessary
     Memory.empire_world_memory_counter += 1;
-    if (Memory.empire_world_memory_counter > 60) {
-        empire.update_world_memory();
-    }
+    //if (Memory.empire_world_memory_counter > 60) {
+    //    empire.update_world_memory();
+    //}
 
     // find all towers
     start = Game.cpu.getUsed();
