@@ -5,26 +5,39 @@ var roleHarvester = {
     /** @param {Creep} creep **/
     run: function(creep) {
         
-        // Setup Variables
-        let my_source;
-        let source_location = new RoomPosition(creep.memory.source_location.x,creep.memory.source_location.y,creep.memory.source_location.roomName);
-        let harvest_location = new RoomPosition(creep.memory.harvest_location.x,creep.memory.harvest_location.y,creep.memory.harvest_location.roomName);
+        // Initialize Creep If Necessary
+        if (!('harvest' in creep.memory)) {
 
-        // Get energy source (and store it if we haven't already)
-        if (typeof creep.memory.harvest_source_id  == 'undefined') {
-            my_source = source_location.lookFor(LOOK_SOURCES)[0];
-            creep.memory.harvest_source_id = my_source.id;
-        } else {
-            my_source = Game.getObjectById(creep.memory.harvest_source_id);
+            // Find a free energy source to harvest
+            let source_obj = utilities.find_unassigned_energy_source_obj(creep.memory.room);
+
+            // Uninitialze it if we didn't find anything
+            if (source_obj == null) {
+                console.log('NO FREE ENERGY SOURCES FOUND FOR HARVESTER!');
+                return;
+            } else {
+                // set the harvest data structure
+                creep.memory.harvest = {};
+                creep.memory.harvest.source_id = source_obj.id;
+                creep.memory.harvest.harvest_pos_shorthand = source_obj.harvest_pos_shorthand;
+                creep.memory.harvest.harvesting = true;
+                creep.memory.harvest.container_id = Memory.empire.rooms[creep.memory.room].objects_at_position.containers;
+            }
+
         }
 
-        // Initialize Container ID
-        if (typeof creep.memory.container_id  == 'undefined') {
-            creep.memory.container_id = '';
+        // Setup Variables
+        let my_source = Game.getObjectById(creep.memory.harvest.source_id);
+        let harvest_location = utilities.room_position_from_shorthand(creep.memory.harvest.harvest_pos_shorthand)
+
+        // Get container
+        creep.memory.harvest.container_id = Memory.empire.rooms[creep.memory.room].objects_at_position.containers;
+        if (creep.memory.harvest.container_id == '') {
+            creep.memory.harvest.container_id = Memory.empire.rooms[creep.memory.room].objects_at_position.containers;
         }
 
         // Figure out if we still need to build a container
-        if (creep.memory.container_id == '') {
+        if (creep.memory.harvest.container_id == '') {
             let look_return = harvest_location.lookFor(
                 LOOK_STRUCTURES
             )

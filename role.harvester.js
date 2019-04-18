@@ -9,40 +9,19 @@ var roleHarvester = {
         // Initialize Creep If Necessary
         if (!('harvest' in creep.memory)) {
 
-            // Unset any extraneous variables
-            creep.memory.harvest = {};
-            creep.memory.harvest.source_id = '';
-            creep.memory.harvest.harvest_pos_shorthand = '';
-            creep.memory.harvest.harvesting = true;
-
             // Find a free energy source to harvest
-            for (let source_object of Memory.empire.rooms[creep.memory.room].sources) {
-                let assigned = false;
-                for (const i in Game.creeps) {
-                    let search_creep = Game.creeps[i];
-                    if (search_creep.memory.role == 'harvester' && creep.memory.room == search_creep.memory.room) {
-                        if ('harvest' in creep.memory) {
-                            if ('source_id' in creep.memory.harvest) {
-                                if (search_creep.memory.harvest.source_id == source_object.id) {
-                                    assigned = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                if (!assigned) {
-                    creep.memory.harvest.source_id = source_object.id;
-                    creep.memory.harvest.harvest_pos_shorthand = source_object.harvest_pos_shorthand;
-                    break;
-                }
-            }
+            let source_obj = utilities.find_unassigned_energy_source_obj(creep.memory.room);
 
             // Uninitialze it if we didn't find anything
-            if (creep.memory.harvest.source_id == '') {
+            if (source_obj == null) {
                 console.log('NO FREE ENERGY SOURCES FOUND FOR HARVESTER!');
-                delete creep.memory.harvest;
                 return;
+            } else {
+                // set the harvest data structure
+                creep.memory.harvest = {};
+                creep.memory.harvest.source_id = source_obj.id;
+                creep.memory.harvest.harvest_pos_shorthand = source_obj.harvest_pos_shorthand;
+                creep.memory.harvest.harvesting = true;
             }
 
         }
@@ -57,7 +36,7 @@ var roleHarvester = {
         }
 
         // Transfer logic
-        if (creep.memory.harvest.harvesting == false) {
+        if (!creep.memory.harvest.harvesting) {
 
             // Target Priorities
             let priorities = ['spawns','extensions','towers','containers','storages'];

@@ -33,6 +33,29 @@ var utilities = {
         // Return Name
         return room_name+'-' + role + '-' + max_index;
 
+    },
+
+    find_unassigned_energy_source_obj: function(room_name) {
+
+        // Find a free energy source to harvest
+        for (let source_object of Memory.empire.rooms[room_name].sources) {
+            for (const i in Game.creeps) {
+                let search_creep = Game.creeps[i];
+                if (search_creep.memory.role == 'harvester' && search_creep.memory.room == room_name) {
+                    if ('harvest' in search_creep.memory) {
+                        if ('source_id' in search_creep.memory.harvest) {
+                            if (search_creep.memory.harvest.source_id == source_object.id) {
+                                return source_object;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Return nothing since nothing is unassigned
+        return null;
+
     }
 
 };
