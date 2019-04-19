@@ -5,16 +5,24 @@ var roleBuilder = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        if(creep.memory.building && creep.carry.energy == 0) {
-            creep.memory.building = false;
+        // Initialize Creep If Necessary
+        if (!('build' in creep.memory)) {
+
+            creep.memory.build = {};
+            creep.memory.build.building = false;
+
+        }
+
+        if(creep.memory.build.building && creep.carry.energy == 0) {
+            creep.memory.build.building = false;
             creep.say('🔄 harvest');
         }
-        if(!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
-            creep.memory.building = true;
+        if(!creep.memory.build.building && creep.carry.energy == creep.carryCapacity) {
+            creep.memory.build.building = true;
             creep.say('🚧 build');
         }
 
-        if(creep.memory.building) {
+        if(creep.memory.build.building) {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if(targets.length) {
                 if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
@@ -25,7 +33,7 @@ var roleBuilder = {
                 roleUpgrader.run(creep);
             }
         } else {
-            creep.getEnergy(true,false);
+            creep.getEnergy(true,true);
         }
     }
 };

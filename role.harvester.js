@@ -10,7 +10,7 @@ var roleHarvester = {
         if (!('harvest' in creep.memory)) {
 
             // Find a free energy source to harvest
-            let source_obj = utilities.find_unassigned_energy_source_obj(creep.memory.room);
+            let source_obj = utilities.find_unassigned_energy_source_obj(creep.memory.room, true);
 
             // Uninitialze it if we didn't find anything
             if (source_obj == null) {

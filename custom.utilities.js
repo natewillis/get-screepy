@@ -35,21 +35,28 @@ var utilities = {
 
     },
 
-    find_unassigned_energy_source_obj: function(room_name) {
+    find_unassigned_energy_source_obj: function(room_name, stay_home) {
 
         // Find a free energy source to harvest
         for (let source_object of Memory.empire.rooms[room_name].sources) {
+            let assigned = false;
             for (const i in Game.creeps) {
                 let search_creep = Game.creeps[i];
-                if (search_creep.memory.role == 'harvester' && search_creep.memory.room == room_name) {
+                if ((search_creep.memory.role == 'harvester' || search_creep.memory.role == 'harvester_static') && search_creep.memory.room == room_name) {
                     if ('harvest' in search_creep.memory) {
                         if ('source_id' in search_creep.memory.harvest) {
                             if (search_creep.memory.harvest.source_id == source_object.id) {
-                                return source_object;
+                                if (!stay_home || room_name == source_object.harvest_pos_shorthand.substring(0,room_name.length)) {
+                                    assigned = true;
+                                    break;
+                                }
                             }
                         }
                     }
                 }
+            }
+            if (!assigned) {
+                return source_object;
             }
         }
 

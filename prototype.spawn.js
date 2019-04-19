@@ -11,7 +11,7 @@ StructureSpawn.prototype.spawn_creeps_if_necessary =
             let empire_room = Memory.empire.rooms[room_name];
             let room = Game.rooms[room_name];
 
-            // Run this code for every spawn
+            // Run this code for every spawn 
             for (let spawn_id of empire_room.spawns) {
 
                 let spawn = Game.getObjectById(spawn_id);
@@ -20,21 +20,8 @@ StructureSpawn.prototype.spawn_creeps_if_necessary =
                 console.log('Queue size is ' + room.memory.creep_creation_queue.length);
                 if (room.memory.creep_creation_queue.length > 0) {
 
-                    // Current room info
-                    let max_energy = room.energyCapacityAvailable;
-                    let rcl = Game.getObjectById(empire_room.controllers[0]).level;
-
-                    // Get Creeps That Belong To Me
-                    var creeps = _.filter(Game.creeps, (creep) => creep.memory.room == room_name);
-
-                    // Something is wrong since all my creeps are dead
-                    if (Object.keys(creeps).length <= 2) {
-                        rcl = 1; // Set the rcl low to rebuild things
-                        max_energy = Math.max(300,room.energyAvailable);
-                    }
-
                     // Check if we're topped off
-                    if (room.energyAvailable >= max_energy) {
+                    if (room.energyAvailable >= room.memory.creep_creation_queue[0].cost) {
                         // Check if were spawning something
                         if (spawn.spawning == null) {
                             retVal = spawn.spawnCreep(

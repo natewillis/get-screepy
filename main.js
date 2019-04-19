@@ -15,6 +15,7 @@ module.exports.loop = function () {
     let start = 0;
     let elapsed = 0;
 
+    // Clean up creep memory
     for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
             delete Memory.creeps[name];
