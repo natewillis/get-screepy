@@ -1,4 +1,3 @@
-/// <reference path="ScreepsAutocomplete-master\_references.js" />
 var utilities = require('custom.utilities');
 var roleHarvester = {
 

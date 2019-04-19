@@ -1,4 +1,3 @@
-/// <reference path="ScreepsAutocomplete-master\_references.js" />
 require('prototype.spawn');
 require('prototype.tower');
 require('prototype.creep');

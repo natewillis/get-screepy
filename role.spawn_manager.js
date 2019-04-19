@@ -1,4 +1,3 @@
-/// <reference path="ScreepsAutocomplete-master\_references.js" />
 var roleBuilder = require('role.builder');
 var utilities = require('custom.utilities');
 var roleSpawnManager = {
@@ -6,107 +5,172 @@ var roleSpawnManager = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        // Initialize Memory
-        if (typeof creep.memory.container_ids  == 'undefined') {
-            creep.memory.container_ids = [];
-        }
-
-        // Find and store containers
-        let containers = {};
-        if (creep.memory.container_ids.length == 0) {
-            // Harvester Logic
-            for (let energy_source of Game.spawns[creep.memory.spawn].memory.energy_sources) {
-                for (let harvest_location of energy_source.harvest_locations) {
-
-                    // Check if this is a container
-                    harvest_location = new RoomPosition(harvest_location.x,harvest_location.y,harvest_location.roomName);
-                    
-                    let look_return = harvest_location.lookFor(
-                        LOOK_STRUCTURES
-                    );
-                    look_return = look_return.filter(function (structure) {
-                        return structure.structureType == 'container';
-                    });
-                    if (look_return.length>0) {
-                        creep.memory.container_ids.push(look_return[0].id);
-                        containers[look_return[0].id] = look_return[0];
-                    }
-                }
-            }
-        } else {
-            for (let container_id of creep.memory.container_ids) {
-                containers[container_id] = Game.getObjectById(container_id);
-            }
-        }
-
-        // Inialize States
-        if (typeof creep.memory.manager_state  == 'undefined') {
-            creep.memory.manager_state = 'retrieving';
-            creep.memory.manager_target = creep.memory.container_ids[0];
+        // Initialize Manager
+        if (!('spawn_manager' in creep.memory)) {
+            creep.memory.spawn_manager = {}
+            creep.memory.spawn_manager.state = 'retrieving';
+            creep.memory.spawn_manager.target_id = '';
         }
 
         // State Changes
         if (creep.carry.energy == creep.carryCapacity) {
-            creep.memory.manager_state = 'distributing';
-            creep.memory.manager_target = '';
+            creep.memory.spawn_manager.state = 'distributing';
+            creep.memory.spawn_manager.target_id = '';
         } else if (creep.carry.energy == 0) {
-            creep.memory.manager_state = 'retrieving';
-            sorted_ids = creep.memory.container_ids;
-            sorted_ids.sort(function (b,a) {
-                if (containers[a].store[RESOURCE_ENERGY] < containers[b].store[RESOURCE_ENERGY])
-                    return -1;
-                if (containers[a].store[RESOURCE_ENERGY] > containers[b].store[RESOURCE_ENERGY])
-                    return 1;
-                return 0;
-            });
-            creep.memory.manager_target = sorted_ids[0];
+            creep.memory.spawn_manager.state = 'retrieving';
+            creep.memory.spawn_manager.target_id = '';
         }
 
-        // Retrieval State
-        if (creep.memory.manager_state == 'retrieving') {
-            source_container = containers[creep.memory.manager_target];
-            let retVal = creep.withdraw(source_container,RESOURCE_ENERGY);
-            if(retVal == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source_container, {visualizePathStyle: {stroke: '#ffaa00'}});
+        // Execute States 
+        if (creep.memory.manager_state = 'retrieving') {
+
+            // If we have a target, verify it still has energy
+            let target = null;
+            if (creep.memory.spawn_manager.target_id !== '') {
+                target = Game.getObjectById(creep.memory.spawn_manager.target_id);
+                if (target.store[RESOURCE_ENERGY] == 0) {
+                    creep.memory.spawn_manager.target_id = '';
+                }
             }
-        } else if (creep.memory.manager_state == 'distributing') {
-            // Find Priority One Targets
-            var room = Game.spawns[creep.memory.spawn].room;
-            var targets = room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN ||
-                        structure.structureType == STRUCTURE_TOWER) && 
-                        structure.energy < structure.energyCapacity;
+
+            // If we have no target find one
+            if (creep.memory.spawn_manager.target_id = '') {
+
+                // Grab objects
+                let containers = [];
+                for (let container_id of Memory.empire.rooms[creep.memory.room].containers) {
+                    containers.push(Game.getObjectById(container_id));
                 }
-            });
-            console.log('first level ' + JSON.stringify(targets));
-            if(targets.length > 0) {
-                // Transfer Energy To Target
-                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                for (let storage_id of Memory.empire.rooms[creep.memory.room].storages) {
+                    containers.push(Game.getObjectById(storage_id));
                 }
-            } else {
-                // Find Priority Two Targets
-                var targets = room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return structure.structureType == STRUCTURE_STORAGE;
+
+                containers.sort(function (b,a) {
+
+                    if (a.structureType == b.structureType) {
+                        if (a.store[RESOURCE_ENERGY] < b.store[RESOURCE_ENERGY]) {
+                                return -1;
+                        } else if (a.store[RESOURCE_ENERGY] > b.store[RESOURCE_ENERGY]) {
+                                return 1;
+                        } else {
+                                return 0;
+                        }
+                    } else {
+                        if (a.structureType == STRUCTURE_CONTAINER) {
+                                return -1;
+                        } else {
+                                return 1;
+                        }
+                    }
+
+                });
+
+                // Set Target
+                if (containers.length > 0) {
+                    target = containers[0];
+                }
+
+            }
+
+            // Get Energy
+            if (target !== null) {
+                let retVal = creep.withdraw(target,RESOURCE_ENERGY);
+                if(retVal == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
+            }
+
+        } else { // Distribute!
+
+            // If we have a target, verify it still has capacity
+            let target = null;
+            if (creep.memory.spawn_manager.target_id !== '') {
+                    target = Game.getObjectById(creep.memory.spawn_manager.target_id);
+                    if ('storeCapacity' in target) {
+                            if (target.store[RESOURCE_ENERGY] >= target.storeCapacity) {
+                                    creep.memory.spawn_manager.target_id = '';
+                            }
+                    } else {
+                            // Its a spawn/extension/tower 
+                            if (target.energy >= target.energyCapacity) {
+                                    creep.memory.spawn_manager.target_id = '';
+                            }
+                    }
+            }
+
+            // If we don't have a target, find one 
+            if (creep.memory.spawn_manager.target_id == '') {
+
+                // Setup Priorities
+                let priorities = {
+                    'spawns':2,
+                    'extensions':1,
+                    'towers':3,
+                    'storages':4
+                };
+                let priority_structure_map = {
+                    STRUCTURE_SPAWN: 'spawns',
+                    STRUCTURE_EXTENSION: 'extensions',
+                    STRUCTURE_TOWER: 'towers',
+                    STRUCTURE_STORAGE: 'storages'
+                }
+
+                // Setup array of potential targets
+                let targets = [];
+                for (let priority in priorities) {
+                    for (let target_id of Memory.empire.room[creep.memory.room][priority]) {
+
+                        // Get target object 
+                        let cur_target = Game.getObjectById(target_id);
+
+                        // Only add it if its not full
+                        if (utilities.energy_percent_full(cur_target)<1) {
+                                targets.push(cur_target);
+                        }
+
+                    }
+                }
+
+                // Sort targets
+                targets.sort(function (a,b) {
+                    if(priorities[priority_structure_map[a.structureType]] == priorities[priority_structure_map[a.structureType]]) {
+
+                        // Same structure, organize by energy percentage
+                        if (utilities.energy_percent_full(a)<utilities.energy_percent_full(b)) {
+                            return -1;
+                        } else if (utilities.energy_percent_full(a)>utilities.energy_percent_full(b)) {
+                            return 1;
+                        } else {
+                            // Find closest
+                            if (a.pos.getRangeTo(creep.pos) < b.pos.getRangeTo(creep.pos)) {
+                                return -1;
+                            } else if (a.pos.getRangeTo(creep.pos) > b.pos.getRangeTo(creep.pos)) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+                        }
+
                     }
                 });
-                console.log(JSON.stringify(targets));
-                if(targets.length > 0) {
-                    console.log('I need to bring energy to the big one');
-                    if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
-                    }
-                } else {
-                    // Switch Role Until We Have A Place To Put Energy
-                    console.log(creep.name + ' has no harvest tasks to do, switching to builder')
-                    roleBuilder.run(creep);
+
+                // Set the best target
+                if (targets.length>0) {
+                    target = targets[0];
+                }
+
+            }
+
+            // Distribute Energy
+            if (target !== null) {
+                if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
+
         }
     }
+
 };
 
 module.exports = roleSpawnManager;

@@ -1,4 +1,3 @@
-/// <reference path="ScreepsAutocomplete-master\_references.js" />
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = {
 
@@ -25,6 +24,24 @@ var roleBuilder = {
         if(creep.memory.build.building) {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if(targets.length) {
+
+                // Sort Targets (Finish one before starting the next)
+                targets.sort(function(b,a) {
+                    if (a.progress/a.progressTotal < b.progress/b.progressTotal) {
+                        return -1;
+                    } else if (a.progress/a.progressTotal > b.progress/b.progressTotal) {
+                        return 1;
+                    } else {
+                        if (a.pos.getRangeTo(creep.pos) > b.pos.getRangeTo(creep.pos)) {
+                            return -1;
+                        } else if (a.pos.getRangeTo(creep.pos) > b.pos.getRangeTo(creep.pos)) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+                    }
+                });
+
                 if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
