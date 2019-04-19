@@ -29,7 +29,7 @@ StructureSpawn.prototype.spawn_creeps_if_necessary =
                                 room.memory.creep_creation_queue[0].opts
                             );
                             if(retVal == 0) {
-                                console.log('Spawning new creep: ' + this.memory.creep_creation_queue[0].name);
+                                console.log('Spawning new creep: ' + room.memory.creep_creation_queue[0].name);
                                 room.memory.creep_creation_queue.shift();
                             }
                         }

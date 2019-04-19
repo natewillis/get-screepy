@@ -38,7 +38,7 @@ var roleHarvester = {
         if (!creep.memory.harvest.harvesting) {
 
             // Target Priorities
-            let priorities = ['spawns','extensions','towers','containers','storages'];
+            let priorities = ['extensions','spawns','towers','containers','storages'];
 
             // go through priority list and find something to fill
             let fill_target = null;

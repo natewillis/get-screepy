@@ -63,6 +63,30 @@ var utilities = {
         // Return nothing since nothing is unassigned
         return null;
 
+    },
+
+    energy_level: function(game_object) {
+        if ('storeCapacity' in game_object) {
+            return game_object.store[RESOURCE_ENERGY];
+        } else if ('energy' in game_object) {
+            return game_object.energy;
+        }
+    },
+
+    energy_capacity: function(game_object) {
+        if ('storeCapacity' in game_object) {
+            return game_object.storeCapacity;
+        } else if ('energy' in game_object) {
+            return game_object.energyCapacity;
+        }
+    },
+
+    energy_percent_full: function(game_object) {
+        if ('storeCapacity' in game_object) {
+            return (game_object.store[RESOURCE_ENERGY]/game_object.storeCapacity);
+        } else if ('energy' in game_object) {
+            return (game_object.energy/game_object.energyCapacity);
+        }
     }
 
 };

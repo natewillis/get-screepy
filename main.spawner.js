@@ -57,7 +57,7 @@ function create_queue_parameters(room_name,rcl,game_state) {
             repeat: ["work","carry","move"], //200
             core: ["work","carry","move"], //200
             max_energy: 100000,
-            max_total: Math.ceil(construction_sites.length/4),
+            max_total: Math.ceil(construction_sites.length/3),
             priority: 10
         };
     }
