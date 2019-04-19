@@ -57,7 +57,8 @@ function create_queue_parameters(room_name,rcl,game_state) {
             repeat: ["work","carry","move"], //200
             core: ["work","carry","move"], //200
             max_energy: 100000,
-            max_total: Math.ceil(construction_sites.length/3),
+            max_total: Math.ceil(construction_sites.length/3
+                ),
             priority: 10
         };
     }
@@ -133,14 +134,14 @@ function creep_body_optimizer(core,repeat,max_energy) {
     var creep_body = [];
 
     // Add core if we can
-    if (calculate_energy_from_body_array(creep_body.concat(core))<max_energy) {
+    if (calculate_energy_from_body_array(creep_body.concat(core))<=max_energy) {
 
         // concat core
         creep_body = creep_body.concat(core);
 
         // Add repeat parts until weve gotten enough (only if core got added)
         if (repeat.length>0) {
-            while (calculate_energy_from_body_array(creep_body.concat(repeat))<max_energy) {
+            while (calculate_energy_from_body_array(creep_body.concat(repeat))<=max_energy) {
                 creep_body = creep_body.concat(repeat);
             }
         }
