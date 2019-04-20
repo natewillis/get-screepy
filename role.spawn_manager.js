@@ -131,6 +131,7 @@ var roleSpawnManager = {
                         let cur_target = Game.getObjectById(target_id);
 
                         // Only add it if its not full
+                        console.log(priority + ' is ' + utilities.energy_percent_full(cur_target) + ' percent full');
                         if (utilities.energy_percent_full(cur_target)<1) {
                                 targets.push(cur_target);
                         }
