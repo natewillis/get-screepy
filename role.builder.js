@@ -34,7 +34,7 @@ var roleBuilder = {
                     } else {
                         if (a.pos.getRangeTo(creep.pos) > b.pos.getRangeTo(creep.pos)) {
                             return -1;
-                        } else if (a.pos.getRangeTo(creep.pos) > b.pos.getRangeTo(creep.pos)) {
+                        } else if (a.pos.getRangeTo(creep.pos) < b.pos.getRangeTo(creep.pos)) {
                             return 1;
                         } else {
                             return 0;
