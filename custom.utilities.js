@@ -23,7 +23,7 @@ var utilities = {
 
         // Figure Out Max Screep Value
         let creeps = _.filter(Game.creeps, (creep) => creep.memory.room == room_name && creep.memory.role == role);
-        let current_indexes = creeps.map(creep => parseInt(creep.name.split("-"+role+"-")[1]));
+        let current_indexes = creeps.map(creep => parseInt(creep.name.split("-"+role+"-")[1]) || 0);
         let max_index = 0;
         if (current_indexes.length>0) {
             max_index = Math.max(...current_indexes);
