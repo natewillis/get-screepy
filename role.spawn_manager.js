@@ -131,15 +131,12 @@ var roleSpawnManager = {
                         let cur_target = Game.getObjectById(target_id);
 
                         // Only add it if its not full
-                        console.log('looking at ' + priority + ' with priority ' + priorities[priority_structure_map[cur_target.structureType]]);
                         if (utilities.energy_percent_full(cur_target)<1) {
-                            console.log('adding ' + priority);
                             targets.push(cur_target);
                         }
 
                     }
                 }
-                console.log(JSON.stringify(targets));
 
                 // Sort targets
                 targets.sort(function (a,b) {
