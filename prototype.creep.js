@@ -3,7 +3,7 @@ var roles = {
     harvester_static: require('role.harvester_static'),
     upgrader: require('role.upgrader'),
     builder: require('role.builder'),
-    repairer: require('role.repairer'),
+    wall_repairer: require('role.wall_repairer'),
     road_repairer: require('role.road_repairer'),
     spawn_manager: require('role.spawn_manager')
 };

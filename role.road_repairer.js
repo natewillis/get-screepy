@@ -1,4 +1,3 @@
-/// <reference path="ScreepsAutocomplete-master\_references.js" />
 var roleBuilder = require('role.builder');
 var roleRoadRepairer = {
 

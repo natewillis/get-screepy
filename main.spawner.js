@@ -81,6 +81,16 @@ function create_queue_parameters(room_name,rcl,game_state) {
         priority: 10
     };
 
+    // Wall Repairer
+    queue_parameters.wall_repairer = {
+        repeat: ["carry"], //50
+        core: ["work","carry","move"], //200,
+        max_energy: 100000,
+        max_total: Math.ceil(Memory.empire.rooms[room_name].walls.length/30),
+        priority: 10
+    };
+
+
     // Harvester/Spawn Manager Stuff
     let harvester_static_core = ["work","work","work","work","carry","move"];
     if (rcl>1 && Game.rooms[room_name].energyCapacityAvailable > calculate_energy_from_body_array(harvester_static_core)) {
