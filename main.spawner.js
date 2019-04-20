@@ -112,6 +112,9 @@ function create_queue_parameters(room_name,rcl,game_state) {
             max_total: 2,
             priority: 0
         };
+        if (rcl>=5) {
+            queue_parameters.spawn_manager.max_total = 3;
+        }
 
     } else {
 
