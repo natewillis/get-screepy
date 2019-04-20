@@ -80,7 +80,7 @@ Creep.prototype.runRole =
 Creep.prototype.get_healing_if_necessary =
     function () {
         if (this.hits<this.hitsMax) {
-            var room = Game.spawns[this.memory.spawn].room;
+            var room = Game.rooms[this.memory.room];
             var towers = room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return structure.structureType == STRUCTURE_TOWER;
