@@ -25,7 +25,7 @@ var roleBuilder = {
 
             // Check for single hp ramparts buildings ive just built
             var targets = creep.pos.findInRange(FIND_STRUCTURES,1);
-            targets = targets.filter(target => target.structureType == STRUCTURE_RAMPART && target.hits==1);
+            targets = targets.filter(target => target.structureType == STRUCTURE_RAMPART && target.hits<1000);
             if (targets.length > 0) {
                 targets = [targets[0]];
             } else {
