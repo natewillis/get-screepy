@@ -143,7 +143,7 @@ var roleSpawnManager = {
 
                 // Sort targets
                 targets.sort(function (a,b) {
-                    if(priorities[priority_structure_map[a.structureType]] == priorities[priority_structure_map[a.structureType]]) {
+                    if(priorities[priority_structure_map[a.structureType]] == priorities[priority_structure_map[b.structureType]]) {
 
                         // Same structure, organize by energy percentage
                         if (utilities.energy_percent_full(a)<utilities.energy_percent_full(b)) {
@@ -161,9 +161,9 @@ var roleSpawnManager = {
                             }
                         }
 
-                    } else if (priorities[priority_structure_map[a.structureType]] < priorities[priority_structure_map[a.structureType]]) {
+                    } else if (priorities[priority_structure_map[a.structureType]] < priorities[priority_structure_map[b.structureType]]) {
                         return -1;
-                    } else if (priorities[priority_structure_map[a.structureType]] > priorities[priority_structure_map[a.structureType]]) {
+                    } else if (priorities[priority_structure_map[a.structureType]] > priorities[priority_structure_map[b.structureType]]) {
                         return 1
                     }
                 });
