@@ -38,7 +38,7 @@ var roleWallRepairer = {
                         }
                     }
                 }
-                creep.memory.wall_repairer.desired_energy_level += 500;
+                creep.memory.wall_repairer.desired_energy_level += 1000;
             }
 
             let current_target = null;
