@@ -113,7 +113,7 @@ function create_queue_parameters(room_name,rcl,game_state) {
         };
         if (rcl>=5) {
             queue_parameters.spawn_manager.max_total = 3;
-            queue_parameters.spawn_manager.max_energy = 600;
+            queue_parameters.spawn_manager.max_energy = 900;
         }
 
     } else {
