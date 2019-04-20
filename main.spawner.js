@@ -85,7 +85,7 @@ function create_queue_parameters(room_name,rcl,game_state) {
         repeat: ["carry","carry","carry","work","move","move"], //300
         core: ["work","carry","move"], //200,
         max_energy: 100000,
-        max_total: Math.ceil(Memory.empire.rooms[room_name].walls.length/30),
+        max_total: Math.ceil(Memory.empire.rooms[room_name].walls.length/15),
         priority: 10
     };
 
