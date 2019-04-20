@@ -83,7 +83,7 @@ function create_queue_parameters(room_name,rcl,game_state) {
 
     // Wall Repairer
     queue_parameters.wall_repairer = {
-        repeat: ["carry","carry","move"], //150
+        repeat: ["carry","carry","carry","work","move","move"], //300
         core: ["work","carry","move"], //200,
         max_energy: 100000,
         max_total: Math.ceil(Memory.empire.rooms[room_name].walls.length/30),
