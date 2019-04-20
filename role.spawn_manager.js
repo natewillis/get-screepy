@@ -116,10 +116,10 @@ var roleSpawnManager = {
                     'storages':4
                 };
                 let priority_structure_map = {
-                    STRUCTURE_SPAWN: 'spawns',
-                    STRUCTURE_EXTENSION: 'extensions',
-                    STRUCTURE_TOWER: 'towers',
-                    STRUCTURE_STORAGE: 'storages'
+                    'spawn': 'spawns',
+                    'extension': 'extensions',
+                    'tower': 'towers',
+                    'storage': 'storages'
                 }
 
                 // Setup array of potential targets
