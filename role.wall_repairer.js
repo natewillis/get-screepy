@@ -46,8 +46,10 @@ var roleWallRepairer = {
             while(creep.memory.wall_repairer.optimum_path.length>0 && current_target == null) {
                 current_target = Game.getObjectById(creep.memory.wall_repairer.optimum_path[0]);
                 let rampart_extra = 0;
-                if (current_target.structureType == STRUCTURE_RAMPART) {
-                    rampart_extra = 500;
+                if (current_target !== null) {
+                    if (current_target.structureType == STRUCTURE_RAMPART) {
+                        rampart_extra = 1000;
+                    }
                 }
                 if (current_target == null) {
                     creep.memory.wall_repairer.optimum_path.shift();
