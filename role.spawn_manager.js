@@ -131,8 +131,10 @@ var roleSpawnManager = {
                         let cur_target = Game.getObjectById(target_id);
 
                         // Only add it if its not full
+                        console.log('looking at ' + priority);
                         if (utilities.energy_percent_full(cur_target)<1) {
-                                targets.push(cur_target);
+                            console.log('adding ' + priority);
+                            targets.push(cur_target);
                         }
 
                     }
@@ -141,7 +143,6 @@ var roleSpawnManager = {
 
                 // Sort targets
                 targets.sort(function (a,b) {
-                    console.log(a.structureType + ' is ' + priorities[priority_structure_map[a.structureType]]);
                     if(priorities[priority_structure_map[a.structureType]] == priorities[priority_structure_map[a.structureType]]) {
 
                         // Same structure, organize by energy percentage
