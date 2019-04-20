@@ -4,6 +4,7 @@ var roles = {
     upgrader: require('role.upgrader'),
     builder: require('role.builder'),
     repairer: require('role.repairer'),
+    road_repairer: require('role.road_repairer'),
     spawn_manager: require('role.spawn_manager')
 };
 

@@ -22,7 +22,7 @@ var roleSpawnManager = {
         }
 
         // Execute States 
-        if (creep.memory.manager_state = 'retrieving') {
+        if (creep.memory.spawn_manager.state == 'retrieving') {
 
             // If we have a target, verify it still has energy
             let target = null;
@@ -34,15 +34,21 @@ var roleSpawnManager = {
             }
 
             // If we have no target find one
-            if (creep.memory.spawn_manager.target_id = '') {
+            if (creep.memory.spawn_manager.target_id == '') {
 
                 // Grab objects
                 let containers = [];
                 for (let container_id of Memory.empire.rooms[creep.memory.room].containers) {
-                    containers.push(Game.getObjectById(container_id));
+                    let temp_container = Game.getObjectById(container_id);
+                    if (temp_container.store[RESOURCE_ENERGY] > 0) {
+                        containers.push(temp_container);
+                    }
                 }
                 for (let storage_id of Memory.empire.rooms[creep.memory.room].storages) {
-                    containers.push(Game.getObjectById(storage_id));
+                    let temp_storage = Game.getObjectById(storage_id);
+                    if (temp_storage.store[RESOURCE_ENERGY] > 0) {
+                        containers.push(temp_storage);
+                    }
                 }
 
                 containers.sort(function (b,a) {
@@ -68,6 +74,8 @@ var roleSpawnManager = {
                 // Set Target
                 if (containers.length > 0) {
                     target = containers[0];
+                } else {
+                    creep.getEnergy(true,true); // Fallback and harvest my own energy
                 }
 
             }
@@ -81,7 +89,6 @@ var roleSpawnManager = {
             }
 
         } else { // Distribute!
-
             // If we have a target, verify it still has capacity
             let target = null;
             if (creep.memory.spawn_manager.target_id !== '') {
@@ -118,7 +125,7 @@ var roleSpawnManager = {
                 // Setup array of potential targets
                 let targets = [];
                 for (let priority in priorities) {
-                    for (let target_id of Memory.empire.room[creep.memory.room][priority]) {
+                    for (let target_id of Memory.empire.rooms[creep.memory.room][priority]) {
 
                         // Get target object 
                         let cur_target = Game.getObjectById(target_id);

@@ -57,7 +57,7 @@ function create_queue_parameters(room_name,rcl,game_state) {
             repeat: ["work","carry","move"], //200
             core: ["work","carry","move"], //200
             max_energy: 100000,
-            max_total: Math.ceil(construction_sites.length/3
+            max_total: Math.ceil(construction_sites.length/6
                 ),
             priority: 10
         };
@@ -72,7 +72,14 @@ function create_queue_parameters(room_name,rcl,game_state) {
         priority: 9
     };
 
-    // Repairer
+    // Road Repairer
+    queue_parameters.road_repairer = {
+        repeat: ["carry"], //50
+        core: ["work","carry","move"], //200,
+        max_energy: 100000,
+        max_total: 1,
+        priority: 10
+    };
 
     // Harvester/Spawn Manager Stuff
     let harvester_static_core = ["work","work","work","work","carry","move"];
@@ -84,16 +91,16 @@ function create_queue_parameters(room_name,rcl,game_state) {
             core: harvester_static_core, //600
             max_energy: 600,
             max_total: Memory.empire.rooms[room_name].sources.length,
-            priority: 0
+            priority: 1
         };
 
         // Also need a spawn manager
         queue_parameters.spawn_manager = {
-            repeat: ["carry","carry","move"], //150
-            core: ["work","carry","move"], //100
-            max_energy: 100000,
-            max_total: 1,
-            priority: 1
+            repeat: ["carry"], //50
+            core: ["work","carry","move"], //200
+            max_energy: 300,
+            max_total: 2,
+            priority: 0
         };
 
     } else {
