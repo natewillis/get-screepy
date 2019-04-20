@@ -32,8 +32,10 @@ var roleWallRepairer = {
                 creep.memory.wall_repairer.desired_energy_level = 100000000000000;
                 for (let current_target_id of creep.memory.wall_repairer.optimum_path) {
                     let current_target = Game.getObjectById(current_target_id);
-                    if (current_target.hits < creep.memory.wall_repairer.desired_energy_level) {
-                        creep.memory.wall_repairer.desired_energy_level = current_target.hits;
+                    if (current_target !== null) {
+                        if (current_target.hits < creep.memory.wall_repairer.desired_energy_level) {
+                            creep.memory.wall_repairer.desired_energy_level = current_target.hits;
+                        }
                     }
                 }
                 creep.memory.wall_repairer.desired_energy_level += 50;
