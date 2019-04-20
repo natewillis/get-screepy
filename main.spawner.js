@@ -65,7 +65,7 @@ function create_queue_parameters(room_name,rcl,game_state) {
 
     // Upgrader
     queue_parameters.upgrader = {
-        repeat: ["carry"], //50
+        repeat: ["carry","carry","move"], //150
         core: ["work","carry","move"], //200,
         max_energy: 100000,
         max_total: 1,
@@ -74,7 +74,7 @@ function create_queue_parameters(room_name,rcl,game_state) {
 
     // Road Repairer
     queue_parameters.road_repairer = {
-        repeat: ["carry"], //50
+        repeat: ["carry","carry","move"], //150
         core: ["work","carry","move"], //200,
         max_energy: 100000,
         max_total: 1,
@@ -83,7 +83,7 @@ function create_queue_parameters(room_name,rcl,game_state) {
 
     // Wall Repairer
     queue_parameters.wall_repairer = {
-        repeat: ["carry"], //50
+        repeat: ["carry","carry","move"], //150
         core: ["work","carry","move"], //200,
         max_energy: 100000,
         max_total: Math.ceil(Memory.empire.rooms[room_name].walls.length/30),
@@ -106,8 +106,8 @@ function create_queue_parameters(room_name,rcl,game_state) {
 
         // Also need a spawn manager
         queue_parameters.spawn_manager = {
-            repeat: ["carry"], //50
-            core: ["work","carry","move"], //200
+            repeat: ["carry","carry","move"], //150
+            core: ["work","move"], //150
             max_energy: 300,
             max_total: 2,
             priority: 0
