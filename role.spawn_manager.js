@@ -62,7 +62,7 @@ var roleSpawnManager = {
                                 return 0;
                         }
                     } else {
-                        if (a.structureType == STRUCTURE_CONTAINER) {
+                        if (a.structureType == STRUCTURE_STORAGE) {
                                 return -1;
                         } else {
                                 return 1;
