@@ -159,6 +159,10 @@ var roleSpawnManager = {
                             }
                         }
 
+                    } else if (priorities[priority_structure_map[a.structureType]] < priorities[priority_structure_map[a.structureType]]) {
+                        return -1;
+                    } else if (priorities[priority_structure_map[a.structureType]] > priorities[priority_structure_map[a.structureType]]) {
+                        return 1
                     }
                 });
 
