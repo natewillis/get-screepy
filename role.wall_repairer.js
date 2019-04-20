@@ -4,7 +4,7 @@ var roleWallRepairer = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        // Initialize Creep If Necessary
+        // Initialize Creep If Necessary 
         if (!('wall_repairer' in creep.memory)) {
 
             // set the wall_repairer data structure
@@ -42,7 +42,10 @@ var roleWallRepairer = {
             let current_target = null;
             while(creep.memory.wall_repairer.optimum_path.length>0 && current_target == null) {
                 current_target = Game.getObjectById(creep.memory.wall_repairer.optimum_path[0]);
-                if (current_target.hits >= creep.memory.wall_repairer.desired_energy_level) {
+                if (current_target == null) {
+                    creep.memory.wall_repairer.optimum_path.shift();
+                    current_target = null;
+                } else if (current_target.hits >= creep.memory.wall_repairer.desired_energy_level) {
                     creep.memory.wall_repairer.optimum_path.shift();
                     current_target = null;
                 }
