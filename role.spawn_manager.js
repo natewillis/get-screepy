@@ -137,6 +137,7 @@ var roleSpawnManager = {
 
                     }
                 }
+                console.log(JSON.stringify(targets));
 
                 // Sort targets
                 targets.sort(function (a,b) {
