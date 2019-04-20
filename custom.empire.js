@@ -298,7 +298,8 @@ var empire = {
                         let something_there = false;
                         if (current_pos.shorthand() in Memory.empire.rooms[room_name].objects_at_position) {
                             for (let structure_type in structure_types) {
-                                if (Memory.empire.rooms[room_name].objects_at_position[current_pos.shorthand()][structure_type !== '']) {
+                                console.log('for ' + structure_type + ' at x:' + i + ' y:' + j + ' there is ' Memory.empire.rooms[room_name].objects_at_position[current_pos.shorthand()][structure_type]);
+                                if (Memory.empire.rooms[room_name].objects_at_position[current_pos.shorthand()][structure_type] !== '') {
                                     something_there = true;
                                 }
                             }
@@ -326,7 +327,7 @@ var empire = {
                         let something_there_y = false;
                         if (current_pos_y.shorthand() in Memory.empire.rooms[room_name].objects_at_position) {
                             for (let structure_type in structure_types) {
-                                if (Memory.empire.rooms[room_name].objects_at_position[current_pos_y.shorthand()][structure_type !== '']) {
+                                if (Memory.empire.rooms[room_name].objects_at_position[current_pos_y.shorthand()][structure_type] !== '') {
                                     something_there_y = true;
                                 }
                             }
