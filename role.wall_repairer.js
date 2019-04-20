@@ -45,10 +45,14 @@ var roleWallRepairer = {
             let current_target = null;
             while(creep.memory.wall_repairer.optimum_path.length>0 && current_target == null) {
                 current_target = Game.getObjectById(creep.memory.wall_repairer.optimum_path[0]);
+                let rampart_extra = 0;
+                if (current_target.structureType == STRUCTURE_RAMPART) {
+                    rampart_extra = 500;
+                }
                 if (current_target == null) {
                     creep.memory.wall_repairer.optimum_path.shift();
                     current_target = null;
-                } else if (current_target.hits >= creep.memory.wall_repairer.desired_energy_level) {
+                } else if (current_target.hits >= (creep.memory.wall_repairer.desired_energy_level+rampart_extra)) {
                     creep.memory.wall_repairer.optimum_path.shift();
                     current_target = null;
                 }
