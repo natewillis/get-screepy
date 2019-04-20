@@ -38,7 +38,7 @@ var utilities = {
     find_unassigned_energy_source_obj: function(room_name, stay_home) {
 
         // Find a free energy source to harvest
-        console.log(JSON.stringify(Memory.empire.rooms[room_name]));
+        console.log('memory for ' + room_name + ' is ' + JSON.stringify(Memory.empire.rooms[room_name]));
         for (let source_object of Memory.empire.rooms[room_name].sources) {
             let assigned = false;
             for (const i in Game.creeps) {
