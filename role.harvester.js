@@ -5,6 +5,9 @@ var roleHarvester = {
     /** @param {Creep} creep **/
     run: function(creep) {
         
+        // Variables
+        let room = Game.rooms[creep.memory.room];
+        
         // Initialize Creep If Necessary
         if (!('harvest' in creep.memory)) {
 
@@ -46,7 +49,7 @@ var roleHarvester = {
 
 
                 // Go through objects of this type
-                for (let structure_id of Memory.empire.rooms[creep.memory.room][priority]) {
+                for (let structure_id of room.memory.structures[priority]) {
                     let structure = Game.getObjectById(structure_id);
                     let has_room = false;
                     if ('energy' in structure) {

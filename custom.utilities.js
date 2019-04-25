@@ -1,16 +1,5 @@
 var utilities = {
 
-    compare_RoomPositions: function(room_position_1,room_position_2) {
-        
-        if (room_position_1.x == room_position_2.x && 
-            room_position_1.y == room_position_2.y &&
-            room_position_1.roomName == room_position_2.roomName) {
-            return true;
-        } else {
-            return false;
-        }
-    },
-
     room_position_from_shorthand: function(shorthand) {
 
         // Perform REGEX
@@ -37,9 +26,11 @@ var utilities = {
 
     find_unassigned_energy_source_obj: function(room_name, stay_home) {
 
+        // Create room object
+        let room = Game.rooms[room_name];
+
         // Find a free energy source to harvest
-        console.log('memory for ' + room_name + ' is ' + JSON.stringify(Memory.empire.rooms[room_name]));
-        for (let source_object of Memory.empire.rooms[room_name].sources) {
+        for (let source_object of room.memory.sources) {
             let assigned = false;
             for (const i in Game.creeps) {
                 let search_creep = Game.creeps[i];
@@ -58,6 +49,36 @@ var utilities = {
             }
             if (!assigned) {
                 return source_object;
+            }
+        }
+
+        // Return nothing since nothing is unassigned
+        return null;
+
+    },
+
+    find_unassigned_carrier_energy_source_obj: function(room_name) {
+
+        // Find a free energy source to harvest
+        for (let source_object of Memory.empire.rooms[room_name].sources) {
+            if (room_name !== source_object.harvest_pos_shorthand.substring(0,room_name.length)) { // Needs to be an external room
+                let assigned = false;
+                for (const i in Game.creeps) {
+                    let search_creep = Game.creeps[i];
+                    if (search_creep.memory.role == 'long_range_carrier' && search_creep.memory.room == room_name) {
+                        if ('long_range_carrier' in search_creep.memory) {
+                            if ('source_id' in search_creep.memory.long_range_carrier) {
+                                if (search_creep.memory.long_range_carrier.source_id == source_object.id) {
+                                    assigned = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!assigned) {
+                    return source_object;
+                }
             }
         }
 
@@ -88,6 +109,20 @@ var utilities = {
         } else if ('energy' in game_object) {
             return (game_object.energy/game_object.energyCapacity);
         }
+    },
+
+    cached_object_by_id: function(id) {
+        
+        if (typeof this.objects == 'undefined' ) {
+            this.objects = {};
+        }
+
+        if (!(id in this.objects)) {
+            this.objects[id] = Game.getObjectById(id);
+        }
+
+        return this.objects[id];
+
     }
 
 };

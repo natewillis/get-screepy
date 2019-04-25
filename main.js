@@ -22,12 +22,10 @@ module.exports.loop = function () {
         }
     }
 
-    // Run empire variable creation code if necessary
-    Memory.empire_world_memory_counter += 1;
-    if (Memory.empire_world_memory_counter > 60) {
-        empire.update_world_memory();
-    }
+    // Run empire variable creation code
+    empire.update_world_memory();
 
+    
     // find all towers
     start = Game.cpu.getUsed();
     var towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER);
@@ -39,25 +37,29 @@ module.exports.loop = function () {
     elapsed = Game.cpu.getUsed() - start;
     //console.log('Towers used ' + elapsed + 'cpu time')
 
-    // for each creeps
-    start = Game.cpu.getUsed();
-    for (let name in Game.creeps) {
-        // run creep logic
-        Game.creeps[name].runRole();
-    }
-    elapsed = Game.cpu.getUsed() - start;
-    //console.log('Creep logic used ' + elapsed + 'cpu time')
-
-    // New Spawning Logic
-    start = Game.cpu.getUsed();
-    spawner.update_creep_queue();
-    for (let room_name in Memory.empire.rooms) {
-        let room = Memory.empire.rooms[room_name];
-        for (let spawn_id of room.spawns) {
-            let spawn = Game.getObjectById(spawn_id);
-            spawn.spawn_creeps_if_necessary();
+    if (false) {
+        // for each creeps
+        start = Game.cpu.getUsed();
+        for (let name in Game.creeps) {
+            // run creep logic
+            Game.creeps[name].runRole();
         }
+        elapsed = Game.cpu.getUsed() - start;
+        //console.log('Creep logic used ' + elapsed + 'cpu time')
+
+        // New Spawning Logic
+        start = Game.cpu.getUsed();
+        spawner.update_creep_queue();
+        for (const i in Game.rooms) {
+            let room = Game.rooms[i];
+            if (room.controller.my) {
+                for (let spawn_id of room.memory.structures.spawns) {
+                    let spawn = Game.getObjectById(spawn_id);
+                    spawn.spawn_creeps_if_necessary();
+                }
+            }
+        }
+        elapsed = Game.cpu.getUsed() - start;
+        //console.log('spawning logic used ' + elapsed + 'cpu time')
     }
-    elapsed = Game.cpu.getUsed() - start;
-    //console.log('spawning logic used ' + elapsed + 'cpu time')
 }

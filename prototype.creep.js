@@ -22,36 +22,31 @@ Creep.prototype.runRole =
     function (useContainer, useSource) {
         /** @type {StructureContainer} */
         let container;
+        var room = Game.rooms[this.memory.room];
 
         // if the Creep should look for containers
         if (useContainer) {
 
-            // Find Container For Refilling
-            var room = Game.rooms[this.memory.room];
-            var sources = room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return structure.structureType == STRUCTURE_STORAGE;
+            // Storages get first priority
+            if (room.storage !== undefined) {
+                if(room.storage.store[RESOURCE_ENERGY] > 0) {
+                    container = room.storage;
                 }
-            });
-            if (sources.length>0) {
-                container = sources[0];
-            } else {
-                var sources = room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return structure.structureType == STRUCTURE_CONTAINER && 
-                            structure.store[RESOURCE_ENERGY] > 0;
-                    }
-                });
-                if (sources.length>0) {
-                    sorted_indexes = [...Array(sources.length).keys()];
-                    sorted_indexes.sort(function (b,a) {
-                        if (sources[a].store[RESOURCE_ENERGY] < sources[b].store[RESOURCE_ENERGY])
+            } else {// Regular containers get next priority
+                containers = [];
+                for (let container_id of room.memory.structures.containers) {
+                    containers.push(Game.getObjectById(container_id));
+                }
+                containers = containers.filter(function(c) { return c.store[RESOURCE_ENERGY]>0;});
+                if (containers.length>0) {
+                    containers.sort(function(b,a) {
+                        if (a.store[RESOURCE_ENERGY] < b.store[RESOURCE_ENERGY])
                             return -1;
-                        if (sources[a].store[RESOURCE_ENERGY] > sources[b].store[RESOURCE_ENERGY])
+                        if (a.store[RESOURCE_ENERGY] > b.store[RESOURCE_ENERGY])
                             return 1;
                         return 0;
-                    });
-                    container = sources[sorted_indexes[0]];
+                    })
+                    container = containers[0];
                 }
             }
 

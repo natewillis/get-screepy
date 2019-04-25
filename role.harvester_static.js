@@ -28,12 +28,13 @@ var roleHarvester = {
         }
 
         // Setup Variables
+        let room = Game.rooms[creep.memory.room];
         let my_source = Game.getObjectById(creep.memory.harvest.source_id);
         let harvest_location = utilities.room_position_from_shorthand(creep.memory.harvest.harvest_pos_shorthand)
 
         // Update container from empire memory
-        if (harvest_location.shorthand() in Memory.empire.rooms[creep.memory.room].objects_at_position) {
-            creep.memory.harvest.container_id = Memory.empire.rooms[creep.memory.room].objects_at_position[harvest_location.shorthand()].containers;
+        if (harvest_location.shorthand() in room.memory.objects_at_position) {
+            creep.memory.harvest.container_id = room.memory.objects_at_position[harvest_location.shorthand()].containers;
         } else {
             creep.memory.harvest.container_id = '';
         }

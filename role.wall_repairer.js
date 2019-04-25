@@ -4,6 +4,9 @@ var roleWallRepairer = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
+        // Init Variables
+        let room = Game.rooms[creep.memory.room];
+
         // Initialize Creep If Necessary 
         if (!('wall_repairer' in creep.memory)) {
 
@@ -28,7 +31,7 @@ var roleWallRepairer = {
 
             // Fill in the path
             if (creep.memory.wall_repairer.optimum_path.length == 0) {
-                creep.memory.wall_repairer.optimum_path = Memory.empire.rooms[creep.memory.room].optimized_role_paths.walls.slice();
+                creep.memory.wall_repairer.optimum_path = room.memory.optimized_role_paths.walls.slice();
                 creep.memory.wall_repairer.optimum_path = creep.memory.wall_repairer.optimum_path.concat(creep.memory.wall_repairer.optimum_path.splice(0,Math.floor(Math.random() * (creep.memory.wall_repairer.optimum_path.length))));
                 creep.memory.wall_repairer.desired_energy_level = 100000000000000;
                 for (let current_target_id of creep.memory.wall_repairer.optimum_path) {

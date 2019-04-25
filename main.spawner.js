@@ -51,13 +51,13 @@ function create_queue_parameters(room_name,rcl,game_state) {
     // Game State Independent Logic
 
     // Builder Logic (Only spawn a builder if there's something to build)
-    let construction_sites = Game.rooms[room_name].find(FIND_CONSTRUCTION_SITES);
-    if (construction_sites.length>0) {
+    let construction_site_count = Memory.rooms[room_name].construction_sites.length;
+    if (construction_site_count>0) {
         queue_parameters.builder = {
             repeat: ["work","carry","move"], //200
             core: ["work","carry","move"], //200
             max_energy: 100000,
-            max_total: Math.ceil(construction_sites.length/6),
+            max_total: Math.ceil(construction_site_count/6),
             priority: 10
         };
     }
@@ -85,7 +85,7 @@ function create_queue_parameters(room_name,rcl,game_state) {
         repeat: ["carry","carry","carry","work","move","move"], //300
         core: ["work","carry","move"], //200,
         max_energy: 100000,
-        max_total: Math.ceil(Memory.empire.rooms[room_name].walls.length/15),
+        max_total: Math.ceil(Memory.rooms[room_name].structures.walls.length/15),
         priority: 10
     };
 
@@ -99,7 +99,7 @@ function create_queue_parameters(room_name,rcl,game_state) {
             repeat: ["work"], //0
             core: harvester_static_core, //600
             max_energy: 600,
-            max_total: Memory.empire.rooms[room_name].sources.length,
+            max_total: Memory.rooms[room_name].sources.length,
             priority: 1
         };
 
@@ -119,7 +119,7 @@ function create_queue_parameters(room_name,rcl,game_state) {
     } else {
 
         // Simple Harvesters
-        let sources = Memory.empire.rooms[room_name].sources.filter(function (source_obj) {
+        let sources = Memory.rooms[room_name].sources.filter(function (source_obj) {
             return room_name == source_obj.harvest_pos_shorthand.substring(0,room_name.length)
         });
 
@@ -181,15 +181,18 @@ var mainSpawner = {
     // Create Spawn Function
     update_creep_queue: function() {
 
-        for (let room_name in Memory.empire.rooms) {
+        for (const i in Game.rooms) {
 
             // Store this reference in memory for easy coding
-            let empire_room = Memory.empire.rooms[room_name];
-            let room = Game.rooms[room_name];
+            let room = Game.rooms[i];
+            
+            if (!(room.controller.my)) {
+                continue;
+            }
 
             // Current room info
             let max_energy = room.energyCapacityAvailable;
-            let rcl = Game.getObjectById(empire_room.controllers[0]).level;
+            let rcl = room.controller.level;
 
             // Get Creeps That Belong To Me
             var creeps = _.filter(Game.creeps, (creep) => creep.memory.room == room_name);

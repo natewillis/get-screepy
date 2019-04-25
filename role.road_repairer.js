@@ -4,6 +4,9 @@ var roleRoadRepairer = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
+        // Variables
+        let room = Game.rooms[creep.memory.room];
+
         // Initialize Creep If Necessary
         if (!('road_repairer' in creep.memory)) {
 
@@ -27,7 +30,7 @@ var roleRoadRepairer = {
 
             // Fill in the path
             if (creep.memory.road_repairer.optimum_path.length == 0) {
-                creep.memory.road_repairer.optimum_path = Memory.empire.rooms[creep.memory.room].optimized_role_paths.roads.slice();
+                creep.memory.road_repairer.optimum_path = room.memory.optimized_role_paths.roads.slice();
             }
 
             let current_target = null;

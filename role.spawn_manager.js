@@ -5,6 +5,9 @@ var roleSpawnManager = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
+        // Init Variables
+        let room = Game.rooms[creep.memory.room];
+
         // Initialize Manager
         if (!('spawn_manager' in creep.memory)) {
             creep.memory.spawn_manager = {}
@@ -38,13 +41,13 @@ var roleSpawnManager = {
 
                 // Grab objects
                 let containers = [];
-                for (let container_id of Memory.empire.rooms[creep.memory.room].containers) {
+                for (let container_id of room.memory.structures.containers) {
                     let temp_container = Game.getObjectById(container_id);
                     if (temp_container.store[RESOURCE_ENERGY] > 0) {
                         containers.push(temp_container);
                     }
                 }
-                for (let storage_id of Memory.empire.rooms[creep.memory.room].storages) {
+                for (let storage_id of room.memory.structures.storages) {
                     let temp_storage = Game.getObjectById(storage_id);
                     if (temp_storage.store[RESOURCE_ENERGY] > 0) {
                         containers.push(temp_storage);
@@ -125,7 +128,7 @@ var roleSpawnManager = {
                 // Setup array of potential targets
                 let targets = [];
                 for (let priority in priorities) {
-                    for (let target_id of Memory.empire.rooms[creep.memory.room][priority]) {
+                    for (let target_id of room.memory.structures[priority]) {
 
                         // Get target object 
                         let cur_target = Game.getObjectById(target_id);
