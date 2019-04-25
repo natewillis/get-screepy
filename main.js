@@ -37,29 +37,28 @@ module.exports.loop = function () {
     elapsed = Game.cpu.getUsed() - start;
     //console.log('Towers used ' + elapsed + 'cpu time')
 
-    if (false) {
-        // for each creeps
-        start = Game.cpu.getUsed();
-        for (let name in Game.creeps) {
-            // run creep logic
-            Game.creeps[name].runRole();
-        }
-        elapsed = Game.cpu.getUsed() - start;
-        //console.log('Creep logic used ' + elapsed + 'cpu time')
+    // for each creeps
+    start = Game.cpu.getUsed();
+    for (let name in Game.creeps) {
+        // run creep logic
+        Game.creeps[name].runRole();
+    }
+    elapsed = Game.cpu.getUsed() - start;
+    //console.log('Creep logic used ' + elapsed + 'cpu time')
 
-        // New Spawning Logic
-        start = Game.cpu.getUsed();
-        spawner.update_creep_queue();
-        for (const i in Game.rooms) {
-            let room = Game.rooms[i];
-            if (room.controller.my) {
-                for (let spawn_id of room.memory.structures.spawns) {
-                    let spawn = Game.getObjectById(spawn_id);
-                    spawn.spawn_creeps_if_necessary();
-                }
+    // New Spawning Logic
+    start = Game.cpu.getUsed();
+    spawner.update_creep_queue();
+    for (const i in Game.rooms) {
+        let room = Game.rooms[i];
+        if (room.controller.my) {
+            for (let spawn_id of room.memory.structures.spawns) {
+                let spawn = Game.getObjectById(spawn_id);
+                spawn.spawn_creeps_if_necessary();
             }
         }
-        elapsed = Game.cpu.getUsed() - start;
-        //console.log('spawning logic used ' + elapsed + 'cpu time')
     }
+    elapsed = Game.cpu.getUsed() - start;
+    //console.log('spawning logic used ' + elapsed + 'cpu time')
+
 }

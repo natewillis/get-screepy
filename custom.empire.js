@@ -98,13 +98,21 @@ function event_log_parsing(room_name) {
     if (build_events.length>0) {
         parsed_event_log['building'] = true;
     }
-    let wall_build_events = _.filter(build_events, function(o) { return utilities.cached_object_by_id(o.targetId).structureType == STRUCTURE_WALL; });
+    build_events = _.filter(build_events, function(o) { return utilities.cached_object_by_id(o.data.targetId) !== null; });
+    console.log(JSON.stringify(build_events));
+    let wall_build_events = _.filter(build_events, function(o) { return utilities.cached_object_by_id(o.data.targetId).structureType == STRUCTURE_WALL; });
     if (wall_build_events.length>0) {
         parsed_event_log['walls-building'] = true;
     }
-    let road_build_events = _.filter(build_events, function(o) { return utilities.cached_object_by_id(o.targetId).structureType == STRUCTURE_ROAD; });
+    let road_build_events = _.filter(build_events, function(o) { return utilities.cached_object_by_id(o.data.targetId).structureType == STRUCTURE_ROAD; });
     if (road_build_events.length>0) {
         parsed_event_log['roads-building'] = true;
+    }
+
+    for (let parsed_event_key in parsed_event_log) {
+        if (parsed_event_log[parsed_event_key]) {
+            console.log('Event log shows ' + parsed_event_key + ' happened in ' + room_name);
+        }
     }
 
     // return it
@@ -330,8 +338,8 @@ function wall_building(room_name) {
                 let current_pos = new RoomPosition(i,j,room_name);
                 let something_there = false;
                 if (current_pos.shorthand() in room.memory.objects_at_position) {
-                    for (let structure_id of room.memory.objects_at_position[current_pos.shorthand()]) {
-                        if (structure_id !== '') {
+                    for (let structure_type in room.memory.objects_at_position[current_pos.shorthand()]) {
+                        if (room.memory.objects_at_position[current_pos.shorthand()][structure_type] !== '') {
                             something_there = true;
                         }
                     }
@@ -357,8 +365,8 @@ function wall_building(room_name) {
                 let current_pos_y = new RoomPosition(j,i,room_name);
                 let something_there_y = false;
                 if (current_pos_y.shorthand() in room.memory.objects_at_position) {
-                    for (let structure_id of room.memory.objects_at_position[current_pos.shorthand()]) {
-                        if (structure_id !== '') {
+                    for (let structure_type in room.memory.objects_at_position[current_pos_y.shorthand()]) {
+                        if (room.memory.objects_at_position[current_pos_y.shorthand()][structure_type] !== '') {
                             something_there_y = true;
                         }
                     }

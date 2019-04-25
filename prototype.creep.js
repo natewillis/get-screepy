@@ -5,7 +5,8 @@ var roles = {
     builder: require('role.builder'),
     wall_repairer: require('role.wall_repairer'),
     road_repairer: require('role.road_repairer'),
-    spawn_manager: require('role.spawn_manager')
+    spawn_manager: require('role.spawn_manager'),
+    scout_static: require('role.scout_static')
 };
 
 Creep.prototype.runRole =

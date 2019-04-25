@@ -89,6 +89,15 @@ function create_queue_parameters(room_name,rcl,game_state) {
         priority: 10
     };
 
+    // Static Scout
+    queue_parameters.scout_static = {
+        repeat: [], //0
+        core: ["move"], //50,
+        max_energy: 50,
+        max_total: Object.keys(Game.map.describeExits(room_name)).length,
+        priority: 11
+    };
+
 
     // Harvester/Spawn Manager Stuff
     let harvester_static_core = ["work","work","work","work","carry","move"];
@@ -185,6 +194,7 @@ var mainSpawner = {
 
             // Store this reference in memory for easy coding
             let room = Game.rooms[i];
+            let room_name = room.name;
             
             if (!(room.controller.my)) {
                 continue;
